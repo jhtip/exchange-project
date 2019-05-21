@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/4.1.3/css/bootstrap.min.css}"/>
+
+    <style>
+        .container-width {
+            width: 320px;
+            margin: 0 auto;
+        }
+
+        .margin-top-xs {
+            margin-top: .15em;
+        }
+    </style>
+    <title>환율계산</title>
+</head>
+<body>
+<div class="container container-width">
+    <div class="row">
+        <div class="col-xs-3 col-md-offset-3 border border-gray m-3 p-3">
+            <h1>환율계산</h1>
+            <!--<form th:action="@{/send}" method="post">-->
+
+            <div class="input-group input-group-sm mt-3 mb-2">
+                <label for="sourceCountry">송금국가 : </label>
+                <select th:field="*{sourceCountry}" id="sourceCountry" name="sourceCountry" class="form-control ml-1"
+                        autofocus="autofocus">
+                    <option value="">선택</option>
+                    <option th:each="entry: ${sourceCountry}" th:attr="data-value=${entry.key}" th:value="${entry.key}"
+                            th:text="${entry.value}+'('+${entry.key}+')'"/>
+                </select>
+            </div>
+
+            <div class="input-group input-group-sm mb-2">
+                <label for="currencyCountry">수취국가 : </label>
+                <select th:field="*{sourceCountry}" id="currencyCountry" name="currencyCountry"
+                        class="form-control ml-1" autofocus="autofocus">
+                    <option value="">선택</option>
+                    <option th:each="entry: ${currencyCountry}" th:attr="data-value=${entry.key}"
+                            th:value="${entry.key}" th:text="${entry.value}+'('+${entry.key}+')'"/>
+                </select>
+            </div>
+
+            <div class="input-group input-group-sm mb-2">
+                <label class="position-relative mt-1">환율</label>
+                <label class="position-relative ml-1 mr-1 margin-top-xs">:</label>
+                <input type="text" readonly class="form-control bg-white form-control-plaintext ml-1"
+                       id="currency" value="">
+            </div>
+
+            <div class="input-group input-group-sm mb-2">
+                <label for="transferMoney">송금액 : </label>
+                <input type="text" id="transferMoney" name="transferMoney"
+                       class="form-control mr-1 ml-1"/>
+                <p id="source" style="display:inline"></p>
+            </div>
+
+            <div class="form-group mb-4">
+                <div class="row">
+                    <div class="col-md-12 col-sm-offset-3">
+                        <input type="submit" name="submitButton" id="submitButton"
+                               class="form-control btn btn-primary" value="Submit"/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group input-group-md mb-0" id="total">
+                <span>수취금액은 <p id="totalAmount" style="display:inline"></p> </span>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" th:src="@{/webjars/jquery/3.2.1/dist/jquery.js/}"></script>
+<script type="text/javascript" th:src="@{/webjars/bootstrap/4.1.3/js/bootstrap.min.js}"></script>
+<script>
+    $(function () {
+        $("#total").hide();
+        $("#submitButton").on('click', function () {
+            var source = $("#sourceCountry").find(":selected").data("value");
+            var currency = $("#currencyCountry").find(":selected").data("value")
+            var transfer = $("#transferMoney").val();
+            if (validation(transfer, source)) {
+                if (source && currency) getInfo(source, currency, transfer);
+            }
+        });
+
+        $('select').on('change', function () {
+            var source = $("#sourceCountry").find(":selected").data("value");
+            var currency = $("#currencyCountry").find(":selected").data("value")
+            $("#source").text(source);
+            if (source && currency) getInfo(source, currency)
+        });
+    });
+
+    function getInfo(source, currency, transferMoney) {
+        var money = transferMoney;
+
+        if (!transferMoney) money = 1;
+
+        var request = {
+            source: source,
+            currencies: currency,
+            transferMoney: money
+        };
+
+        $.get("exchange/info", request).done(function (data) {
+            var beforeCal = data.beforeCalculate[currency] + " " + currency + "/" + source;
+            $("#currency").val(beforeCal);
+            if (transferMoney) {
+                $("#total").show();
+                var total = data.currency[currency].split(".")[0] + ".00";
+                var afterCal = total + " " + currency + "입니다.";
+                $("#totalAmount").text(afterCal);
+            }
+        }).fail(function (data) {
+            console.log(data);
+            var alertMessage = "";
+            if (!data) alertMessage = "오류가 발생하였습니다.";
+            alertMessage = data.responseJSON.message;
+            alert(alertMessage);
+        });
+    }
+
+    function validation(transfer, source) {
+        var valid = true;
+        if (transfer < 0 || !$.isNumeric(transfer)) valid = false;
+        if (source === "USD" && transfer > 10000) valid = false;
+        if (!valid) alert("송금액이 바르지 않습니다");
+        return valid;
+    }
+</script>
+</body>
+</html>

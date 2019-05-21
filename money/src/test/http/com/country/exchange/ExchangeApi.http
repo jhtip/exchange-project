@@ -1,0 +1,4 @@
+### 알림 조회
+GET localhost:8080/exchange/info?source=AUD&currency=KRW&transferMoney=100
+
+###

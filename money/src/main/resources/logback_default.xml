@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true">
+
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+
+    <appender name="APPENDER_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss}][%-5level][%logger{36}] - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="org.springframework"  level="INFO" additivity="false">
+        <appender-ref ref="APPENDER_CONSOLE"/>
+    </logger>
+    <logger name="com.country.exchange" level="INFO" additivity="false">
+        <appender-ref ref="APPENDER_CONSOLE"/>
+    </logger>
+    <logger name="com.country.exchange.logging.LoggingFilter" level="DEBUG" additivity="false">
+        <appender-ref ref="APPENDER_CONSOLE"/>
+    </logger>
+
+    <!--hibernate log -->
+    <logger name="org.hibernate.SQL" level="DEBUG" />
+    <logger name="org.hibernate.tool.hbm2ddl" level="DEBUG"/>
+    <logger name="org.hibernate.type" level="TRACE" />
+    <logger name="org.hibernate.stat" level="DEBUG" />
+    <logger name="org.hibernate.type.BasicTypeRegistry" level="WARN" />
+
+    <root level="INFO">
+        <appender-ref ref="APPENDER_CONSOLE" />
+    </root>
+</configuration>

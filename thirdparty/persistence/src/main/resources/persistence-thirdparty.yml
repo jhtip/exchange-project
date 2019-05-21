@@ -1,0 +1,18 @@
+spring:
+  profiles:
+    active: local
+
+logging:
+  path: logs/exchange/
+  config: classpath:logback_default.xml
+
+#Actuator
+management.context-path: /actuators
+
+exchange:
+  url: http://apilayer.net
+  access-key: 1136efe3d1fb0b1923ea34d6c4de6f15
+
+---
+spring:
+  profiles: local

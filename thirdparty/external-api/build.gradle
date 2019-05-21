@@ -1,0 +1,24 @@
+plugins {
+    id 'org.springframework.boot'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile project(':common')
+
+    implementation "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-data-redis"
+    compileOnly "org.projectlombok:lombok:${lombokVersion}"
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+}
+
+bootJar {
+    enabled = false
+}
+
+jar {
+    enabled = true
+}

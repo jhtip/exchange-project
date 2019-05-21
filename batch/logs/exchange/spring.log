@@ -1,0 +1,2 @@
+2019-05-21 12:47:54.042  INFO 2250 --- [main] io.lettuce.core.EpollProvider            : Starting without optional epoll library
+2019-05-21 12:47:54.048  INFO 2250 --- [main] io.lettuce.core.KqueueProvider           : Starting without optional kqueue library
