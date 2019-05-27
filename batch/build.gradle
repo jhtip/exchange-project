@@ -7,17 +7,15 @@ repositories {
 }
 
 dependencies {
-    compile project(':thirdparty:external-api')
-    compile project(':thirdparty:persistence')
     compile project(':common')
+    compile project(':external-api')
+    compile project(':persistence')
 
     implementation('org.springframework.boot:spring-boot-starter-web')
     implementation('org.springframework.boot:spring-boot-starter-data-redis')
 
     compile ("com.google.guava:guava:${guavaVersion}")
     compile ("com.google.code.gson:gson:${gsonVersion}")
-    testAnnotationProcessor("org.projectlombok:lombok:${lombokVersion}")
-    testCompileOnly("org.projectlombok:lombok:${lombokVersion}")
 }
 
 bootJar {

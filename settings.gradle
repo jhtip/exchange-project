@@ -1,8 +1,7 @@
 rootProject.name = "exchange-project"
 
 include ":money"
-include ":thirdparty:external-api"
-include ":thirdparty:persistence"
+include ":external-api"
+include ":persistence"
 include ":common"
 include ":batch"
-

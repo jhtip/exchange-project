@@ -7,9 +7,9 @@ repositories {
 }
 
 dependencies {
-    compile project(':thirdparty:external-api')
-    compile project(':thirdparty:persistence')
     compile project(':common')
+    compile project(':external-api')
+    compile project(':persistence')
 
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
